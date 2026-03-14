@@ -126,6 +126,29 @@ console.log(cowsay.say(opts));
 
     echo please repeat | cowsay
 
+## JSON output mode
+
+Use the `--json` flag to output structured JSON instead of plain ASCII art:
+
+    cowsay Hello --json
+
+Output:
+
+```json
+{
+  "text": "Hello",
+  "bubble": " _______\n< Hello >\n -------",
+  "cow": "        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||",
+  "full": " _______\n< Hello >\n -------\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||"
+}
+```
+
+The JSON output contains:
+- `text`: the original message
+- `bubble`: the speech bubble ASCII art
+- `cow`: the cow ASCII art
+- `full`: the complete rendered output (bubble + cow)
+
 ## Usage in the browser
 
 cowsay works in your browser too with rollup / webpack / browserify / you name it.

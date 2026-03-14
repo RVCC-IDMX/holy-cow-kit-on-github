@@ -38,6 +38,13 @@ export interface IOptions {
     y?: boolean, // youthful
 }
 
+export interface ICowOutput {
+    text: string,
+    bubble: string,
+    cow: string,
+    full: string,
+}
+
 type callback_type = (error: NodeJS.ErrnoException, cow_names: string[]) => void;
 
 /**
@@ -111,6 +118,13 @@ export function list(callback: callback_type): Promise<string[]>;
 export function say(options: IOptions): string;
 
 /**
+ * Like say(), but returns structured JSON output with text, bubble, cow, and full fields.
+ * @param options
+ * @returns {ICowOutput} structured output
+ */
+export function sayJson(options: IOptions): ICowOutput;
+
+/**
  * @param options
  * ## Face :
  * Either choose a mode (set the value as true) **_or_**
@@ -160,3 +174,10 @@ export function say(options: IOptions): string;
  * ```
  */
 export function think(options: IOptions): string;
+
+/**
+ * Like think(), but returns structured JSON output with text, bubble, cow, and full fields.
+ * @param options
+ * @returns {ICowOutput} structured output
+ */
+export function thinkJson(options: IOptions): ICowOutput;

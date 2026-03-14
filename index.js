@@ -54,7 +54,7 @@ var faces = require("./lib/faces");
  * @returns {string} compiled cow
  */
 exports.say = function (options) {
-	return doIt(options, true);
+	return doIt(options, true).full;
 };
 
 /**
@@ -109,7 +109,7 @@ exports.say = function (options) {
  * @returns {string} compiled cow
  */
 exports.think = function (options) {
-	return doIt(options, false);
+	return doIt(options, false).full;
 };
 
 /**
@@ -131,6 +131,22 @@ exports.think = function (options) {
  */
 exports.list = cows.list;
 
+/**
+ * @param options
+ * @returns {ICowOutput} structured output with text, bubble, cow, and full
+ */
+exports.sayJson = function (options) {
+	return doIt(options, true);
+};
+
+/**
+ * @param options
+ * @returns {ICowOutput} structured output with text, bubble, cow, and full
+ */
+exports.thinkJson = function (options) {
+	return doIt(options, false);
+};
+
 function doIt (options, sayAloud) {
 	var cowFile;
 
@@ -141,10 +157,15 @@ function doIt (options, sayAloud) {
 		cowFile = options.f || "default";
 	}
 
-	var cow = cows.get(cowFile);
+	var cowTemplate = cows.get(cowFile);
 	var face = faces(options);
 	face.thoughts = sayAloud ? "\\" : "o";
 
 	var action = sayAloud ? "say" : "think";
-	return balloon[action](options.text || options._.join(" "), options.n ? null : options.W) + "\n" + cow(face);
+	var text = options.text || options._.join(" ");
+	var bubble = balloon[action](text, options.n ? null : options.W);
+	var cowText = cowTemplate(face);
+	var full = bubble + "\n" + cowText;
+
+	return { text: text, bubble: bubble, cow: cowText, full: full };
 }

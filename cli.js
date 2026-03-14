@@ -24,6 +24,9 @@ If the program is invoked as cowthink then the cow will think its message instea
     think: {
       type: 'boolean',
     },
+    json: {
+      type: 'boolean',
+    },
   })
   .describe({
     b: 'Mode: Borg',
@@ -46,6 +49,7 @@ If the program is invoked as cowthink then the cow will think its message instea
     r: 'Select a random cow',
     l: 'List all cowfiles included in this package.',
     think: 'Think the message instead of saying it aloud.',
+    json: 'Output the result as structured JSON with text, bubble, cow, and full fields.',
   })
   .boolean(['b', 'd', 'g', 'p', 's', 't', 'w', 'y', 'n', 'h', 'r', 'l'])
   .help()
@@ -72,7 +76,12 @@ function say() {
   const module = require('./index');
   const think = /think$/.test(argv['$0']) || argv.think;
 
-  console.log(think ? module.think(argv) : module.say(argv));
+  if (argv.json) {
+    const result = think ? module.thinkJson(argv) : module.sayJson(argv);
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(think ? module.think(argv) : module.say(argv));
+  }
 }
 
 function listCows() {
