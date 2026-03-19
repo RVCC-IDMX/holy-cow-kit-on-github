@@ -24,6 +24,11 @@ If the program is invoked as cowthink then the cow will think its message instea
     think: {
       type: 'boolean',
     },
+    json: {
+      type: 'boolean',
+      describe: 'Output structured JSON instead of ASCII art',
+      default: false,
+    },
   })
   .describe({
     b: 'Mode: Borg',
@@ -68,11 +73,19 @@ if (argv.l) {
   });
 }
 
+
 function say() {
   const module = require('./index');
   const think = /think$/.test(argv['$0']) || argv.think;
-
-  console.log(think ? module.think(argv) : module.say(argv));
+  const opts = { ...argv };
+  if (argv.json) {
+    // Use new structured output
+    const result = think ? module.think(opts, { json: true }) : module.say(opts, { json: true });
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    // Legacy string output
+    console.log(think ? module.think(opts) : module.say(opts));
+  }
 }
 
 function listCows() {
