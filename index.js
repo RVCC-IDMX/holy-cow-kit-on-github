@@ -53,7 +53,10 @@ var faces = require("./lib/faces");
  * 
  * @returns {string} compiled cow
  */
-exports.say = function (options) {
+exports.say = function (options, opts = {}) {
+	if (opts.json) {
+		return doItStructured(options, true);
+	}
 	return doIt(options, true);
 };
 
@@ -108,9 +111,37 @@ exports.say = function (options) {
  * 
  * @returns {string} compiled cow
  */
-exports.think = function (options) {
+exports.think = function (options, opts = {}) {
+	if (opts.json) {
+		return doItStructured(options, false);
+	}
 	return doIt(options, false);
 };
+// Structured output for JSON mode
+function doItStructured(options, sayAloud) {
+	var cowFile;
+	if (options.r) {
+		var cowsList = cows.listSync();
+		cowFile = cowsList[Math.floor(Math.random() * cowsList.length)];
+	} else {
+		cowFile = options.f || "default";
+	}
+
+	var cowFn = cows.get(cowFile);
+	var face = faces(options);
+	face.thoughts = sayAloud ? "\\" : "o";
+	var action = sayAloud ? "say" : "think";
+	var text = options.text || (options._ && options._.join(" ")) || "";
+	var bubble = balloon[action](text, options.n ? null : options.W);
+	var cow = cowFn(face);
+	var full = bubble + "\n" + cow;
+	return {
+		text,
+		bubble,
+		cow,
+		full
+	};
+}
 
 /**
  * @example
