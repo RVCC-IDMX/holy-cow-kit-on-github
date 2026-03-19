@@ -1,3 +1,27 @@
+## JSON Output
+
+You can get structured output for integration with scripts and tools:
+
+        cowsay Hello --json
+
+Output:
+
+```json
+{
+    "text": "Hello",
+    "bubble": " _____\n< Hello >\n -----",
+    "cow": "        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\/\\\n                ||----w |\n                ||     ||",
+    "full": " _____\n< Hello >\n -----\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\/\\\n                ||----w |\n                ||     ||"
+}
+```
+
+Fields:
+- `text`: The original message
+- `bubble`: The speech/thought bubble
+- `cow`: The cow ASCII art
+- `full`: The complete rendered output
+
+This makes cowsay easy to use in build scripts, pipelines, and automation!
 # cowsay
 
 ````
